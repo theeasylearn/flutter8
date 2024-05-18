@@ -1,3 +1,10 @@
 1) write a program to find out profit or loss amount from user given production & sale price.
 use only decision making if statement.
 
+2) write a program to findout sum of all digits in given amount 
+amount = 12345
+sum = 1 + 2 + 3 + 4 + 5  = 15 
+
+3) write a program to reverse given amount 
+amount = 12345
+reversed amount = 54321
