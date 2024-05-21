@@ -8,3 +8,7 @@ sum = 1 + 2 + 3 + 4 + 5  = 15
 3) write a program to reverse given amount 
 amount = 12345
 reversed amount = 54321
+
+4) write a program to findout average, minimum & maxium value from double type dynamic list 
+
+5) write a program to findout & prime prime number frm dynamic int type list. 
