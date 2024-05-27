@@ -17,3 +17,6 @@ reversed amount = 54321
 
 7) display binary of all the values in list using forEach and  Anonymous  function
 
+8) Create class Product. store name, price, quantity, tax and total in instance variable. also add display method 
+
+9) Create class Movie. store name, startcast, ticket price and also add display method 
