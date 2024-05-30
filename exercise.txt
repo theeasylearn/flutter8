@@ -20,3 +20,6 @@ reversed amount = 54321
 8) Create class Product. store name, price, quantity, tax and total in instance variable. also add display method 
 
 9) Create class Movie. store name, startcast, ticket price and also add display method 
+
+10) create single level inheritance. there should be 2 class one for foot which return foot of given inches 
+another class should be meter which extends foot class and return meter of given inches. 
