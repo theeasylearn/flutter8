@@ -23,3 +23,9 @@ reversed amount = 54321
 
 10) create single level inheritance. there should be 2 class one for foot which return foot of given inches 
 another class should be meter which extends foot class and return meter of given inches. 
+
+11) do multi level inheritance using example 46 and create following classes 
+Petabyte (PB): 1 PB = 1,024 TB
+Exabyte (EB): 1 EB = 1,024 PB
+Zettabyte (ZB): 1 ZB = 1,024 EB
+Yottabyte (YB): 1 YB = 1,024 ZB
