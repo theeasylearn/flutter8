@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  AlignDemo HomeScreen = new AlignDemo();
-  runApp(HomeScreen);
+  BaseLineDemo b1 = new BaseLineDemo();
+  runApp(b1);
 }
-
-class AlignDemo extends StatelessWidget {
+class BaseLineDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
-      home: Center(
-        child: Container(
-          height: 300,
-          width: 300,
-          padding: EdgeInsets.only(right: 10,top:50),
-          decoration: BoxDecoration(
-            color: Colors.amber
-          ),
-          child: Align(
-              alignment: Alignment(1,-1),
-              child: FlutterLogo(
-                size: 50,
+      home: Material(
+        color: Colors.cyan,
+        child: Center(
+            child: Container(
+              height: 150,
+              width: 150,
+              color: Colors.amberAccent,
+              alignment: Alignment.topCenter,
+              child: Baseline(
+                baseline: 25,
+                baselineType: TextBaseline.alphabetic,
+                child: FlutterLogo(
+                    size: 50,
+                ),
               ),
-          ),
+            ),
         ),
       ),
     );
