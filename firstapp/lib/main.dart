@@ -3,7 +3,7 @@ void main() {
   ProductDetail pd1 = new ProductDetail();
   runApp(pd1);
 }
-//test
+
 class ProductDetail extends StatelessWidget {
   const ProductDetail({super.key});
   @override
