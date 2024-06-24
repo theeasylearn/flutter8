@@ -33,19 +33,42 @@ class ProductDetail extends StatelessWidget {
                   Positioned(
                       left: 0,
                       bottom: 0,
-                      child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.redAccent,
-                          alignment: Alignment.center,
-                          child: Text(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          Expanded(flex:3,child: Container(
+                            height: 50,
+                            color: Colors.redAccent,
+                            alignment: Alignment.center,
+                            child: Text(
                               "Add to cart",
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24
+                              ),
                             ),
-                          ),
+                          )),
+                          Expanded(flex:3,child: Container(
+                            height: 50,
+                            color: Colors.black,
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Buy now",
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24
+                              ),
+                            ),
+                          )),
+                          Expanded(flex:1,child: Container(
+                            height: 50,
+                            color: Colors.blue,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.share),
+                          ))
+                        ],
                       )
                   ),
               ],
