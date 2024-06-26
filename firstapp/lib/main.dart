@@ -1,56 +1,62 @@
 import 'package:flutter/material.dart';
 void main() {
-  CardExample c1 = new CardExample();
-  runApp(c1);
+  SizedBoxDemo s1 = new SizedBoxDemo();
+  runApp(s1);
 }
-class Team extends StatelessWidget
-{
-  String TeamName='', Players='';
-  Team(String TeamName, String Players)
-  {
-      this.TeamName = TeamName;
-      this.Players = Players;
-  }
-    @override
+class SizedBoxDemo extends StatelessWidget {
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Card(
-        elevation: 4.0,
-        child: ListTile(
-          leading: Icon(Icons.account_circle_rounded, size: 48,),
-          title: Text(this.TeamName,style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color: Colors.blueAccent
-          ),),
-          subtitle: Text(this.Players),
+    return MaterialApp(
+      title: "Holiday Package",
+      home: Scaffold(
+        appBar: AppBar(title: Text("Holiday Package"),),
+        body: Material(
+          child: SizedBox(
+              height: 200,
+              width: double.infinity,
+              child: Card(
+                elevation: 6.0,
+                color: Colors.white24,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        color: Colors.deepPurple,
+                        child: Text("Himaliyan Heights (6D/5N)", style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                        ),),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text("Rs 55000"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text("Air Tickets, 5star Hotels, Meals"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text("5 Activity, Veshnavdevi temple"),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(onPressed: (){
+
+                      }, child: Text("Book now")),
+                    )
+                  ],
+                ),
+              ),
+          ),
         ),
       ),
     );
   }
 }
-class CardExample extends StatelessWidget {
 
-  @override
-  Widget build(BuildContext context) {
-      return MaterialApp(
-          home: Scaffold(
-            appBar: AppBar(title: Text("Card Example"),),
-            body: Material(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Team("India","Rohit Sharma (c), Virat Kohli, Bumrah"),
-                    Team("England","Buttler, Baristo, Archar, Livingstone"),
-                    Team("South Afferica","Henry Klassan, De Cock, Rabada"),
-                    Team("Afghanistan","rashid khan, Gurbaz, Nabi"),
-                  ],
-                ),
-            ),
-          ),
-      );
-  }
-}
 
 
