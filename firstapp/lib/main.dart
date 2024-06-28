@@ -1,44 +1,90 @@
 import 'package:flutter/material.dart';
 void main() {
-  AspectRatio1 s1 = new AspectRatio1();
-  runApp(s1);
+  TableDemo td1 = new TableDemo();
+  runApp(td1);
 }
-class AspectRatio1 extends StatelessWidget {
-
+class TableDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Aspect Ratio example",
+        title: "World cup t20 match sechule",
         home: Scaffold(
-            appBar: AppBar(title: Text("Aspect ratio"),),
-            body: Material(
-                child: SizedBox(
-                    width:MediaQuery.of(context).size.width,
-                    height:MediaQuery.of(context).size.height/1.6,
-                    child: Card(
-                        elevation: 8,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              AspectRatio(
-                                  aspectRatio: 16/9,
-                                  child: Ink.image(
-                                      image: NetworkImage('https://picsum.photos/400/200'),
-                                      fit: BoxFit.cover,
-                                      ),
-                              ),
-                              Container(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text("India Vs England"),)
-                            ],
-                        ),
+          appBar: AppBar(
+            title: Text("World cup t20 match sechule(india)"),
+          ),
+          body: Material(
+            child: Table(
+                border: TableBorder.all(color: Colors.red),
+                columnWidths: {
+                    0: FractionColumnWidth(0.4),
+                    1: FractionColumnWidth(0.3),
+                    2: FractionColumnWidth(0.3)
+                },
+                children: [
+                    TableRow(
+                        children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Match",style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Date",style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Venue",style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                        ]
                     ),
-                ),
+                    TableRow(
+                        children: [
+                            Text("India Vs England"),
+                            Text("27-06-2024"),
+                            Text("Barbados")
+                        ]
+                    ),
+                    TableRow(
+                        decoration: BoxDecoration(
+                            color: Colors.limeAccent
+                        ),
+                        children: [
+                            Text("India Vs South Afferic"),
+                            Text("29-06-2024"),
+                            Text("Guyana")
+                        ]
+                    ),
+                    TableRow(
+                        children: [
+                            Text("India Vs Zimbabawe"),
+                            Text("10-07-2024"),
+                            Text("Harare")
+                        ]
+                    ),
+                    TableRow(
+                      decoration: BoxDecoration(
+                          color: Colors.limeAccent
+                      ),
+                      children: [
+                        Text("India Vs Sri lanka"),
+                        Text("15-07-2024"),
+                        Text("Colombo")
+                      ]
+                  ),
+                ],
             ),
+          ),
         ),
     );
   }
 }
+
 
 
 
