@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(Bombarman());
@@ -7,13 +8,26 @@ void main() {
 
 class Bombarman extends StatefulWidget {
   @override
-  State<Bombarman> createState() => _BombarmanState();
+  // State<Bombarman> createState() => _BombarmanState();
+  State<Bombarman> createState() {
+    _BombarmanState b1 = new _BombarmanState();
+    return b1;
+  }
 }
 
 class _BombarmanState extends State<Bombarman> {
   // Initialize the list with the initial images
-  List<String> buttonImages = List.generate(9, (index) => "images/gift_medium.png");
+  List<String> buttonImages =
+      List.generate(9, (index) => "images/gift_medium.png");
   List<int> list = List.filled(9, 0); // Initialize list with 9 zeros
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  bool isGameOver = false;
+  String message = "";
+  int coins = 100;
+  int round = 0;
+
+  String ButtonLabel = "";
   void generateRandomList() {
     Random random = Random();
     // Generate a random index for the one
@@ -21,6 +35,7 @@ class _BombarmanState extends State<Bombarman> {
     list[index] = 1;
     print("generateRandomList() method is called.....");
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,6 +43,12 @@ class _BombarmanState extends State<Bombarman> {
     print("initState() method is called.....");
     generateRandomList();
   }
+
+  Future<void> _playAudio() async {
+    //await _audioPlayer.play(AssetSource('sound/lost.mp3'));
+    isPlaying = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     print("build() method is called.....");
@@ -42,9 +63,55 @@ class _BombarmanState extends State<Bombarman> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  message,
+                  textDirection: TextDirection.ltr,
+                  style: TextStyle(fontSize: 36, color: Colors.red),
+                ),
                 buildRow(0),
                 buildRow(3),
                 buildRow(6),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: MaterialButton(
+                    child: Text(ButtonLabel),
+                    color: Colors.indigo,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      if (isGameOver == true) {
+                        setState(() {
+                          ButtonLabel = "";
+                          isGameOver = false;
+                          round = 0;
+                          coins = 0;
+                          message = "";
+                          buttonImages =
+                              List.generate(9, (index) => "images/gift_medium.png");
+                          generateRandomList();
+                        });
+                      }
+                      if (round >= 2) {
+                        setState(() {
+                          isGameOver = true;
+                          message =
+                              "Congraulation, you win " + coins.toString();
+                          round = 0;
+                          ButtonLabel = "start game";
+                        });
+                      }
+
+                      print("quit button clicked");
+                    },
+                  ),
+                ),
+                Text(
+                  "your coins = " + coins.toString(),
+                  textDirection: TextDirection.ltr,
+                  style: TextStyle(
+                      fontSize: 36,
+                      color: Colors.yellow,
+                      fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),
@@ -74,13 +141,27 @@ class _BombarmanState extends State<Bombarman> {
       padding: EdgeInsets.zero,
       onPressed: () {
         setState(() {
-          if (list[index] == 1)
-          {
-            buttonImages[index] = "images/explode_small.png";
-          }
-          else
-          {
-            buttonImages[index] = "images/win_small.png";
+          if (isGameOver == false) {
+            round++;
+            if (round >= 1) {
+              setState(() {
+                ButtonLabel = "I want to quit";
+              });
+            }
+            if (list[index] == 1) {
+              buttonImages[index] = "images/explode_small.png";
+              isGameOver = true;
+              message = "Game Over";
+              coins = 0;
+            } else {
+              buttonImages[index] = "images/win_small.png";
+              _playAudio();
+              coins = coins * 2;
+              if (round == 8) {
+                isGameOver = false;
+                message = "you won";
+              }
+            }
           }
         });
       },
