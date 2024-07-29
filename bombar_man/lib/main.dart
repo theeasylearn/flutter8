@@ -1,6 +1,6 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(Bombarman());
@@ -20,7 +20,6 @@ class _BombarmanState extends State<Bombarman> {
   List<String> buttonImages =
       List.generate(9, (index) => "images/gift_medium.png");
   List<int> list = List.filled(9, 0); // Initialize list with 9 zeros
-  final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
   bool isGameOver = false;
   String message = "";
@@ -42,11 +41,15 @@ class _BombarmanState extends State<Bombarman> {
     super.initState();
     print("initState() method is called.....");
     generateRandomList();
+    playBackgroundMusic();
   }
-
-  Future<void> _playAudio() async {
+  void playBackgroundMusic() {
     //await _audioPlayer.play(AssetSource('sound/lost.mp3'));
-    isPlaying = true;
+    //isPlaying = true;
+    AssetsAudioPlayer.newPlayer().open(
+      Audio("sound/game.mp3"),
+      autoStart: true,
+    );
   }
 
   @override
@@ -155,7 +158,6 @@ class _BombarmanState extends State<Bombarman> {
               coins = 0;
             } else {
               buttonImages[index] = "images/win_small.png";
-              _playAudio();
               coins = coins * 2;
               if (round == 8) {
                 isGameOver = false;
