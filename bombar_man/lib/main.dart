@@ -86,7 +86,7 @@ class _BombarmanState extends State<Bombarman> {
                           ButtonLabel = "";
                           isGameOver = false;
                           round = 0;
-                          coins = 0;
+                          coins = 100;
                           message = "";
                           buttonImages =
                               List.generate(9, (index) => "images/gift_medium.png");
