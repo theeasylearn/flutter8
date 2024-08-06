@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() {
-  runApp(MediaQueryExample());
+  runApp(GridViewExample2());
 }
-class MediaQueryExample extends StatelessWidget {
+class GridViewExample2 extends StatelessWidget
+{
   List<Map<String, String>> countries = [
     { "name": "Germany", "flag": "https://flagpedia.net/data/flags/w580/de.png", "capital": "Berlin" },
     { "name": "United Kingdom", "flag": "https://flagpedia.net/data/flags/w580/gb.png", "capital": "London" },
@@ -71,75 +71,59 @@ class MediaQueryExample extends StatelessWidget {
     { "name": "Georgia", "flag": "https://flagpedia.net/data/flags/w580/ge.png", "capital": "Tbilisi" },
     { "name": "Cyprus", "flag": "https://flagpedia.net/data/flags/w580/cy.png", "capital": "Nicosia" }
   ];
-  var ScreenHeight,ScreenWidth;
+
   @override
   Widget build(BuildContext context) {
-    //create variable to store screen height and width
-    ScreenHeight = MediaQuery.of(context).size.height;
-    ScreenWidth = MediaQuery.of(context).size.width;
-      return MaterialApp(
-        home: Column(
-          children: [
-              SizedBox(
-                  height: ScreenHeight/2,
-                  width: ScreenWidth,
-                child: Container(
-                    child: DisplayHorizontalList(),
-                ),
-              ),
-              SizedBox(
-                height: ScreenHeight/2,
-                width: ScreenWidth,
-                child: Container(
-                    child: DisplayVerticalList(),
-                ),
-              ),
-          ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Example of ListView"),
         ),
-      );
-  }
-
-  DisplayHorizontalList() {
-      return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+        body: GridView.builder(
             itemCount: countries.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 4,
+
+            ),
             itemBuilder: (context,index){
-                 return SizedBox(
-                    width: ScreenWidth - 5,
-                    height: ScreenHeight /2,
-                    child: Card(
-                        elevation: 10,
-                        child: Image.network(countries[index]['flag'].toString())
-                    ),
-                 );
-        }),
-      );
-  }
-  DisplayVerticalList() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: ListView.builder(
-          itemCount: countries.length,
-          itemBuilder: (context,index){
-            return SizedBox(
-              width: ScreenWidth - 5,
-              child: Card(
+              return SizedBox(
+                width: (MediaQuery.of(context).size.width/2) - 2,
+                height: (MediaQuery.of(context).size.height/3) - 6,
+                child: Card(
                   elevation: 10,
-                  child: ListTile(
-                      leading: CircleAvatar(
-                        child: Image.network(countries[index]['flag'].toString()),
-                      ),
-                      title: FittedBox(
-                          child: Text(countries[index]['name'].toString()),
-                      ),
-                      subtitle: Text(countries[index]['capital'].toString(),
-                      ),
-                  )
-              ),
-            );
-          }),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        FittedBox (
+                            fit: BoxFit.fitWidth,
+                            child: Text(countries[index]['name'].toString(),
+                              style: TextStyle(fontSize: 24,),
+                            )),
+                        SizedBox(height: 10),
+                        Expanded(
+                          child: Image.network(
+                            countries[index]['flag'].toString(),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          countries[index]['capital'].toString(),
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
+      ),
     );
   }
+}
+
+class AutoSizeText {
 }
