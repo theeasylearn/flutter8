@@ -2,68 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 void main() {
-  runApp(LayoutBuilderExample1());
+  runApp(ResponsiveDesign());
 }
-class LayoutBuilderExample1 extends StatelessWidget {
-  const LayoutBuilderExample1({super.key});
+class ResponsiveDesign extends StatelessWidget {
+  const ResponsiveDesign({super.key});
 
   @override
   Widget build(BuildContext context) {
-     return MaterialApp(
-        title: "Layout builder example",
+    return MaterialApp(
         home: Scaffold(
-          appBar: AppBar(title: Text("Dashboard"),),
+          appBar: AppBar(
+            title: Text("Responsive Design Example"),
+          ),
           body: LayoutBuilder(
-              builder: (context,parent) {
-                  return Column(
-                      children: [
-                          Row(
-                              children: [
-                                  Container(
-                                      height: parent.maxHeight /3,
-                                      width: parent.maxWidth /2,
-                                      color: Colors.black12,
-                                  ),
-                                  Container(
-                                      height: parent.maxHeight /3,
-                                      width: parent.maxWidth /2,
-                                      color: Colors.black26,
-                                  ),
-                              ],
-                          ),
-                        Row(
-                          children: [
-                            Container(
-                              height: parent.maxHeight /3,
-                              width: parent.maxWidth /2,
-                              color: Colors.black26,
-                            ),
-                            Container(
-                              height: parent.maxHeight /3,
-                              width: parent.maxWidth /2,
-                              color: Colors.black12,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              height: parent.maxHeight /3,
-                              width: parent.maxWidth /2,
-                              color: Colors.black12,
-                            ),
-                            Container(
-                              height: parent.maxHeight /3,
-                              width: parent.maxWidth /2,
-                              color: Colors.black26,
-                            ),
-                          ],
-                        ),
-                      ],
-                  );
+              builder: (context,screen) {
+                  if(screen.maxWidth>800)
+                    return BigScreenDesign();
+                  else
+                    return MobileScreenDesign();
+
               },
           ),
         ),
-     );
+    );
   }
+}
+class BigScreenDesign extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}
+class MobileScreenDesign extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
 }
