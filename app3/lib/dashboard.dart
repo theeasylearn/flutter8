@@ -176,7 +176,6 @@ class LayoutBuilderExample1 extends StatelessWidget {
 
                   ],
                 ),
-
               ],
             );
           },
