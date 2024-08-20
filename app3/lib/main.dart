@@ -1,72 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 import 'app_splash.dart';
+import 'app_view_expense.dart';
 
 void main() {
-  runApp(ViewExpense());
+  runApp(SimpleInterestCalculator());
 }
-class ViewExpense extends StatelessWidget {
-  const ViewExpense({super.key});
+class SimpleInterestCalculator extends StatefulWidget {
 
+  @override
+  State<SimpleInterestCalculator> createState() => _SimpleInterestCalculatorState();
+}
+
+class _SimpleInterestCalculatorState extends State<SimpleInterestCalculator> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        color: new Color(0xffb2d4be),
-        title: "View Income/Expense",
-        home:  Scaffold(
-          appBar: AppBar(
-            title: Text("View Income Expense"),
-            leading: Image.asset('images/app_icon.png'),
-          ),
-          body: Material(
-            color: new Color(0xffb2d4be),
-            child: CustomScrollView(
-                slivers: [
-
-                    SliverList(
-                        delegate: SliverChildBuilderDelegate((context,index){
-                        return Padding(
-                          padding: EdgeInsets.only(left: 10,right: 10,bottom: 5),
-                          child: (
-                              Card(
-                                  elevation: 10,
-                                  child: ListTile(
-                                      title: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Book Expense", style: TextStyle(
-                                              fontFamily: "sfpro"
-                                            ),),
-                                            Text("100",style: TextStyle(
-                                                fontFamily: "sfpro",
-                                                fontWeight: FontWeight.bold
-                                            ),),
-                                          ],
-                                      ),
-                                      subtitle: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                            Text("Maths book sem 5"),
-                                            Row(
-                                              children: [
-                                                  Image.asset("images/edit.png"),
-                                                  Image.asset("images/delete.png"),
-                                              ],
-                                            )
-                                        ],
-                                      ),
-                                      leading: Image.asset('images/income.png'),
-                                  ),
-                              )
-                          ),
-                        );
-                    }, childCount: 24),)
-                ],
+        title: "Simple Interest Calculator",
+        home: Scaffold(
+            appBar: AppBar(
+                title: Text("Simple Interest Calculator"),
             ),
-          ),
+            body: Material(
+                color: Colors.white30,
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: LayoutBuilder(builder: (context,parent) {
+                      return Center(
+                        child: SizedBox(
+                          height: parent.maxHeight * 0.70,
+                          child: Card(
+                            elevation: 10,
+                            color: Colors.white70,
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  FittedBox(
+                                    child: Text("Simple Interest Calculator",style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                        fontFamily: "sfpro"
+                                    ),),
+                                  ),
+                                  Text("Amount",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "sfpro"
+                                  ),),
+                                  TextField(
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+
+                                  Text("Rate",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "sfpro"
+                                  ),),
+                                  TextField(
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+
+                                  Text("Year",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "sfpro"
+                                  ),),
+                                  TextField(
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    width: parent.maxWidth,
+                                    child: ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text("Calculate Interest")
+                                    ),
+                                  ),
+                                  Text("Result",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "sfpro"
+                                  ),),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                  })
+                ),
+            ),
         ),
     );
   }
 }
+
+
 
