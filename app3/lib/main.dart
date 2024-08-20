@@ -1,86 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-void main() {
-  runApp(sliverExample());
-}
+import 'app_splash.dart';
 
-class sliverExample extends StatelessWidget {
-  final List<Map<String, String>> fruits = [
-    {
-      'name': 'Apple',
-      'nutrition': '52 calories per 100g, high in fiber and Vitamin C',
-      'photoUrl': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg',
-    },
-    {
-      'name': 'Banana',
-      'nutrition': '89 calories per 100g, rich in potassium and Vitamin B6',
-      'photoUrl': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg',
-    },
-    // Add more items as needed
-  ];
+void main() {
+  runApp(ViewExpense());
+}
+class ViewExpense extends StatelessWidget {
+  const ViewExpense({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              title: Text("First Example of Sliver"),
-              leading: Icon(Icons.account_balance),
-            ),
-            SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  return Card(
-                    elevation: 10,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            fruits[index]['photoUrl'].toString(),
-                            fit: BoxFit.cover,
+        color: new Color(0xffb2d4be),
+        title: "View Income/Expense",
+        home:  Scaffold(
+          appBar: AppBar(
+            title: Text("View Income Expense"),
+            leading: Image.asset('images/app_icon.png'),
+          ),
+          body: Material(
+            color: new Color(0xffb2d4be),
+            child: CustomScrollView(
+                slivers: [
+
+                    SliverList(
+                        delegate: SliverChildBuilderDelegate((context,index){
+                        return Padding(
+                          padding: EdgeInsets.only(left: 10,right: 10,bottom: 5),
+                          child: (
+                              Card(
+                                  elevation: 10,
+                                  child: ListTile(
+                                      title: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Book Expense", style: TextStyle(
+                                              fontFamily: "sfpro"
+                                            ),),
+                                            Text("100",style: TextStyle(
+                                                fontFamily: "sfpro",
+                                                fontWeight: FontWeight.bold
+                                            ),),
+                                          ],
+                                      ),
+                                      subtitle: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                            Text("Maths book sem 5"),
+                                            Row(
+                                              children: [
+                                                  Image.asset("images/edit.png"),
+                                                  Image.asset("images/delete.png"),
+                                              ],
+                                            )
+                                        ],
+                                      ),
+                                      leading: Image.asset('images/income.png'),
+                                  ),
+                              )
                           ),
-                        ),
-                        Text(
-                          fruits[index]['name'].toString(),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                childCount: fruits.length,
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 0.75,
-              ),
+                        );
+                    }, childCount: 24),)
+                ],
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Card(
-                      elevation: 10,
-                      child: ListTile(
-                        title: Text(fruits[index]['name'].toString()),
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(fruits[index]['photoUrl'].toString()),
-                        ),
-                        subtitle: Text(fruits[index]['nutrition'].toString()),
-                      ),
-                    ),
-                  );
-                },
-                childCount: fruits.length,
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
     );
   }
 }
+
