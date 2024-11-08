@@ -8,12 +8,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Home",
       debugShowCheckedModeBanner: false, // Removes the debug banner
       home: Scaffold(
+        bottomNavigationBar: MyNavigationBar.getNavigationBar(),
         body: Material(
           child: LayoutBuilder(builder: (context,parent){
             return(
@@ -34,7 +36,7 @@ class _HomeState extends State<Home> {
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     SizedBox(
-                                      height: box.maxHeight * 0.05,
+                                      height: box.maxHeight * 0.10,
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -48,7 +50,7 @@ class _HomeState extends State<Home> {
                                       ],
                                     ),
                                     SizedBox(
-                                      height: box.maxHeight * 0.20,
+                                      height: box.maxHeight * 0.15,
                                     ),
                                     Text('Welcome',
                                       style: TextStyle(
@@ -71,7 +73,26 @@ class _HomeState extends State<Home> {
                       width: parent.maxWidth,
                       height: parent.maxHeight * 0.50,
                       child: Padding(padding: EdgeInsets.all(10),
-                        child: Text('Hello')),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            MaterialButton(onPressed: (){
+
+                            },
+                              color: AppColors.darkPrimary(),
+                              textColor: AppColors.textColor(),
+                              child: Text("Sign in"),
+                            ),
+                            MaterialButton(onPressed: (){
+
+                            },
+                              color: AppColors.accentColor(),
+                              textColor: AppColors.textColor(),
+                              child: Text("Sign Up"),
+                            )
+                          ],
+                        )),
                     ),
 
                   ],
