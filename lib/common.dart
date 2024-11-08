@@ -1,4 +1,6 @@
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 class AppColors
 {
   static Color darkPrimary()
@@ -51,5 +53,52 @@ class AppColors
     Color c = new Color(0xfff1f1f1); // Second `const` is optional in assignments.
     return c;
   }
+  static Color cardBackground()
+  {
+    Color c = new Color(0xffF8F9FA); // Second `const` is optional in assignments.
+    return c;
+  }
+  static Color productBackground()
+  {
+    Color c = new Color(0xffdef6f9); // Second `const` is optional in assignments.
+    return c;
+  }
 
+}
+class MyNavigationBar
+{
+  static Widget getNavigationBar()
+  {
+    return NavigationBar(
+      backgroundColor: Colors.white,
+      labelBehavior:  NavigationDestinationLabelBehavior.alwaysShow,
+      selectedIndex: 0,
+      onDestinationSelected: (int index) {
+
+      },
+      destinations: const <Widget>[
+        NavigationDestination(
+          icon: Icon(Icons.shopping_bag),
+          label: 'Shop',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.search),
+          label: 'Commute',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.account_circle),
+          icon: Icon(Icons.account_circle),
+          label: 'Profile',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.favorite),
+          label: 'Wishlist',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.shopping_cart),
+          label: 'Cart',
+        ),
+      ],
+    );
+  }
 }
