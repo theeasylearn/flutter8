@@ -38,6 +38,8 @@ dependencies:
   get: ^4.6.6
   flutter_secure_storage: ^9.2.2
   logger: ^2.4.0
+  carousel_slider: ^5.0.0
+  flutter_rating: ^2.0.2
 
 dev_dependencies:
   flutter_test:

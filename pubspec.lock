@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      sha256: "7b006ec356205054af5beaef62e2221160ea36b90fb70a35e4deacd49d0349ae"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   characters:
     dependency: transitive
     description:
@@ -78,6 +86,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  flutter_rating:
+    dependency: "direct main"
+    description:
+      name: flutter_rating
+      sha256: "207bcd4a276585b8a0771a5ac03c0f3cdb27490e79a609f9a483d9794fe630b7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -188,10 +204,10 @@ packages:
     dependency: "direct main"
     description:
       name: logger
-      sha256: "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32"
+      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.5.0"
   matcher:
     dependency: transitive
     description:
@@ -228,10 +244,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider
-      sha256: fec0d61223fba3154d87759e3cc27fe2c8dc498f6386c6d6fc80d1afdd1bf378
+      sha256: "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   path_provider_android:
     dependency: transitive
     description:
@@ -361,10 +377,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "2294c64768987ea280b43a3d8357d42d5679f3e2b5b69b602be45b2abbd165b0"
+      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
       url: "https://pub.dev"
     source: hosted
-    version: "5.6.1"
+    version: "5.8.0"
   xdg_directories:
     dependency: transitive
     description:
