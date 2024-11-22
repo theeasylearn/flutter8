@@ -5,11 +5,12 @@ import 'package:online_shop_app/login.dart';
 import 'package:online_shop_app/product.dart';
 import 'package:online_shop_app/product_detail.dart';
 import 'package:online_shop_app/register.dart';
+import 'package:online_shop_app/wishlist.dart';
 
 import 'cart.dart';
 
 void main() {
   // runApp(ProductDetail());
-  runApp(MaterialApp(home: Cart()));
+  runApp(MaterialApp(home: Wishlist()));
 }
 

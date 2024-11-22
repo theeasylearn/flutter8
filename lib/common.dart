@@ -91,7 +91,7 @@ class MyNavigationBar
           label: 'Profile',
         ),
         NavigationDestination(
-          icon: Icon(Icons.favorite),
+          icon: Icon(Icons.bookmark),
           label: 'Wishlist',
         ),
         NavigationDestination(
