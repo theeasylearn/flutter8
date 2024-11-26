@@ -32,7 +32,11 @@ class AppColors
     Color c = new Color(0xff607d8b); // Second `const` is optional in assignments.
     return c;
   }
-
+  static Color accentColorTrans()
+  {
+    Color c = Color(0x80607d8b);
+    return c;
+  }
   static Color primaryText()
   {
     Color c = new Color(0xff212121); // Second `const` is optional in assignments.
