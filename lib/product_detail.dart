@@ -1,24 +1,26 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:online_shop_app/common.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+import 'package:http/http.dart' as http;
 class ProductDetail extends StatefulWidget {
+  String productid = '',categoryid='';
+  ProductDetail(productid,categoryid)
+  {
+    this.categoryid = categoryid;
+    this.productid = productid;
+  }
   @override
-  State<ProductDetail> createState() => _ProductDetailState();
+  State<ProductDetail> createState() => _ProductDetailState(productid,categoryid);
 }
 
 class _ProductDetailState extends State<ProductDetail> {
   int currentPageIndex = 0;
 
-  var productList = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-  ];
+  var productList = [];
   final List<Map<String, dynamic>> products = [
     {
       "category": "Mobile",
@@ -110,6 +112,23 @@ class _ProductDetailState extends State<ProductDetail> {
       },
     );
   }
+  var productDetail = [];
+  var relatedProducts = [];
+  String productid = '',categoryid='';
+
+  _ProductDetailState(productid,categoryid)
+  {
+    this.categoryid = categoryid;
+    this.productid = productid;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProductDetail();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,7 +165,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             .toList(),
                       ),
                       Text(
-                        "IPhone 16 pro max",
+                        productDetail[0]['title'].toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
@@ -154,7 +173,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                       Text(
-                        "Rs 125000",
+                        "Rs" + productDetail[0]['price'].toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -162,7 +181,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                       Text(
-                        "100 Left in stock",
+                        productDetail[0]['stock'].toString() + " Left in stock",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -170,7 +189,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                       Text(
-                        "6.1 Inch",
+                        productDetail[0]['size'].toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -178,7 +197,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                       Text(
-                        "578 Grams",
+                        productDetail[0]['weight'].toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -186,7 +205,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                       Text(
-                        "IPhone 16 pro max",
+                        productDetail[0]['categorytitle'].toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
@@ -218,7 +237,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           )
                         ],
                       ),
-                      Text("BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. BUILT FOR APPLE INTELLIGENCE — Apple Intelligence is the personal intelligence system that helps you write, express yourself and get things done effortlessly. With groundbreaking privacy protections, it gives you peace of mind that no one else can access your data — not even Apple. ",
+                      Text(productDetail[0]['detail'],
                         textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 16,
@@ -265,52 +284,54 @@ class _ProductDetailState extends State<ProductDetail> {
                           elevation: 10,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: products.length,
+                            itemCount: relatedProducts.length,
                             itemBuilder: (context, index) {
-                              return SizedBox(
-                                width: 200, // Set a fixed width for each item
-                                child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  color: AppColors.dividerColor(),
-                                  margin: EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        products[index]['category'].toString(),
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
+                              return InkWell(
+                                child: SizedBox(
+                                  width: 200, // Set a fixed width for each item
+                                  child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    color: AppColors.dividerColor(),
+                                    margin: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
                                         ),
-                                      ),
-                                      Image.asset(
-                                        'images/image_placeholder.jpg',
-                                        height: 100, // Set a fixed height for the image
-                                        width: double.infinity, // Scale the image to fit the width
-                                        fit: BoxFit.cover,
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        products[index]['name'].toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                        Text(
+                                          relatedProducts[index]['category'].toString(),
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        products[index]['price'].toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                        Image.network( Base.getImgAddress() +'product/'
+                                        +  relatedProducts[index]['photo'].toString(),
+                                          height: 100, // Set a fixed height for the image
+                                          width: double.infinity, // Scale the image to fit the width
+                                          fit: BoxFit.cover,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(height: 10),
+                                        Text(
+                                          relatedProducts[index]['name'].toString(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          relatedProducts[index]['price'].toString(),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -325,5 +346,64 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ),
       );
+  }
+
+  Future<void> getProductDetail() async {
+
+    String apiAddress = Base.getAddress() + "product.php?productid=" + this.productid;
+    //convert into uri
+    Uri url = Uri.parse(apiAddress);
+
+    //api call to fetch data from servers
+    var response = await http.get(url);
+    print(response.statusCode);
+    print(response.body);
+
+    //convert into json
+    productDetail = json.decode(response.body);
+
+    //check whether json is properly contructed or not
+    String error = productDetail[0]['error']; //store value of error key of 0th object into String variable error
+    print(error);
+
+    int total = int.parse(productDetail[1]['total'].toString());
+    print(total);
+    //delete 2 objects
+    productDetail.removeRange(0,2);
+    print(productDetail);
+    productList.add(Base.getImgAddress() + "product/" + productDetail[0]['photo'].toString());
+
+    setState(() {
+
+    });
+    getRelatedProducts();
+  }
+
+  Future<void> getRelatedProducts() async {
+    String apiAddress = Base.getAddress() + "product.php?categoryid=" + this.categoryid;
+    print(apiAddress);
+    //convert into uri
+    Uri url = Uri.parse(apiAddress);
+
+    //api call to fetch data from servers
+    var response = await http.get(url);
+    print(response.statusCode);
+    print(response.body);
+
+    //convert into json
+    relatedProducts = json.decode(response.body);
+
+    //check whether json is properly contructed or not
+    String error = relatedProducts[0]['error']; //store value of error key of 0th object into String variable error
+    print(error);
+
+    int total = int.parse(relatedProducts[1]['total'].toString());
+    print(total);
+    //delete 2 objects
+    relatedProducts.removeRange(0,2);
+    print(relatedProducts);
+    setState(() {
+
+    });
   }
 }

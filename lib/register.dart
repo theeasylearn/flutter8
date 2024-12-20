@@ -8,6 +8,43 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  TextEditingController mobileController = new TextEditingController();
+  TextEditingController confirmPasswordController = new TextEditingController();
+
+  String email='',password='',mobile='',confirmPassword='';
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailController.addListener((){
+        if(emailController.text != null && emailController.text.length !=0)
+        {
+            email = emailController.text.trim();
+        }
+    });
+    passwordController.addListener((){
+      if(passwordController.text != null && passwordController.text.length !=0)
+      {
+        password = passwordController.text.trim();
+      }
+    });
+    confirmPasswordController.addListener((){
+      if(confirmPasswordController.text != null && confirmPasswordController.text.length !=0)
+      {
+        confirmPassword = confirmPasswordController.text.trim();
+      }
+    });
+    mobileController.addListener((){
+      if(mobileController.text != null && mobileController.text.length !=0)
+      {
+        mobile = mobileController.text.trim();
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,6 +85,7 @@ class _RegisterState extends State<Register> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       TextField(
+                                        controller: emailController,
                                         keyboardType: TextInputType.emailAddress,
                                         decoration: new InputDecoration(
                                             labelText: 'email',
@@ -62,6 +100,7 @@ class _RegisterState extends State<Register> {
                                       ),
                                       // Mobile Number Field
                                       TextField(
+                                        controller: mobileController,
                                         keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           labelText: 'mobile',
@@ -77,6 +116,7 @@ class _RegisterState extends State<Register> {
 
 // Password Field
                                       TextField(
+                                        controller: passwordController,
                                         keyboardType: TextInputType.text,
                                         obscureText: true,
                                         decoration: InputDecoration(
@@ -93,6 +133,7 @@ class _RegisterState extends State<Register> {
 
 // Confirm Password Field
                                       TextField(
+                                        controller: confirmPasswordController,
                                         keyboardType: TextInputType.text,
                                         obscureText: true,
                                         decoration: InputDecoration(
@@ -107,7 +148,7 @@ class _RegisterState extends State<Register> {
                                         ),
                                       ),
                                       MaterialButton(onPressed: (){
-
+                                              doRegister();
                                       },
                                         color: AppColors.accentColor(),
                                         textColor: AppColors.textColor(),
@@ -124,5 +165,9 @@ class _RegisterState extends State<Register> {
             ),
         ),
     );
+  }
+
+  void doRegister() {
+      print(email + " " + mobile + " " + password + " " + confirmPassword);
   }
 }

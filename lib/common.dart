@@ -106,3 +106,18 @@ class MyNavigationBar
     );
   }
 }
+class Base
+{
+   static String getBase()
+   {
+     return "https://theeasylearnacademy.com/shop/";
+   }
+   static String getAddress()
+   {
+     return getBase() + "ws/";
+   }
+   static String getImgAddress()
+   {
+     return getBase() + "images/";
+   }
+}
