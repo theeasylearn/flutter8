@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:online_shop_app/category.dart';
 import 'package:online_shop_app/change_password.dart';
 import 'package:online_shop_app/checkout.dart';
@@ -16,5 +17,5 @@ import 'package:online_shop_app/wishlist.dart';
 import 'cart.dart';
 void main() {
   // runApp(ProductDetail());
-  runApp(MaterialApp(home: Category()));
+  runApp(GetMaterialApp(home: Register()));
 }

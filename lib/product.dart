@@ -41,85 +41,7 @@ class _ProductState extends State<Product> {
         body: Card(
           color: Colors.white,
           elevation: 10,
-          child: CustomScrollView(
-            slivers: [
-                SliverGrid(delegate: SliverChildBuilderDelegate((BuildContext context,int index){
-                    return InkWell(
-                      onTap: () {
-                        String productid = products[index]['id'].toString();
-                        Get.to(new ProductDetail(productid,categoryid));
-                      },
-                      child: Container(
-                        color: AppColors.productBackground(),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              products[index]['categorytitle'].toString(),
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Image.network( Base.getImgAddress() +'product/'
-                                +  products[index]['photo'].toString()),
-                            SizedBox(height: 10),
-                            Text(
-                              products[index]['title'].toString(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              products[index]['price'].toString(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            FittedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  MaterialButton(onPressed: (){
-
-                                  },
-                                    color: AppColors.accentColor(),
-                                    textColor: AppColors.textColor(),
-                                    child: Icon(Icons.add_shopping_cart_outlined),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  MaterialButton(onPressed: (){
-
-                                  },
-                                    color: AppColors.accentColor(),
-                                    textColor: AppColors.textColor(),
-                                    child: Icon(Icons.shopping_bag_outlined),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                },
-                childCount: products.length),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisSpacing:9,crossAxisSpacing: 9,
-                  crossAxisCount: 2, childAspectRatio: 0.50,))
-            ],
-          )
+          child: showProducts()
         ),
       ),
     );
@@ -152,5 +74,99 @@ class _ProductState extends State<Product> {
     setState(() {
 
     });
+  }
+
+  Widget showProducts()
+  {
+     if(products.length > 0)
+        return CustomScrollView(
+       slivers: [
+         SliverGrid(delegate: SliverChildBuilderDelegate((BuildContext context,int index){
+           return InkWell(
+             onTap: () {
+               String productid = products[index]['id'].toString();
+               Get.to(new ProductDetail(productid,categoryid));
+             },
+             child: Container(
+               color: AppColors.productBackground(),
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   SizedBox(
+                     height: 20,
+                   ),
+                   FittedBox(
+                     child: Text(
+                       products[index]['categorytitle'].toString(),
+                       style: TextStyle(
+                         fontSize: 24,
+                         fontWeight: FontWeight.bold,
+                       ),
+                     ),
+                   ),
+                   Image.network( Base.getImgAddress() +'product/'
+                       +  products[index]['photo'].toString()),
+                   SizedBox(height: 10),
+                   Text(
+                     products[index]['title'].toString(),
+                     textAlign: TextAlign.center,
+                     style: TextStyle(
+                       fontSize: 18,
+                       fontWeight: FontWeight.bold,
+                     ),
+                   ),
+                   Text(
+                     products[index]['price'].toString(),
+                     textAlign: TextAlign.center,
+                     style: TextStyle(
+                       fontSize: 16,
+                       fontWeight: FontWeight.bold,
+                     ),
+                   ),
+                   FittedBox(
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                         MaterialButton(onPressed: (){
+
+                         },
+                           color: AppColors.accentColor(),
+                           textColor: AppColors.textColor(),
+                           child: Icon(Icons.add_shopping_cart_outlined),
+                         ),
+                         SizedBox(
+                           width: 5,
+                         ),
+                         MaterialButton(onPressed: (){
+
+                         },
+                           color: AppColors.accentColor(),
+                           textColor: AppColors.textColor(),
+                           child: Icon(Icons.shopping_bag_outlined),
+                         )
+                       ],
+                     ),
+                   )
+                 ],
+               ),
+             ),
+           );
+         },
+             childCount: products.length),
+             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+               mainAxisSpacing:9,crossAxisSpacing: 9,
+               crossAxisCount: 2, childAspectRatio: 0.50,))
+       ],
+     );
+     else
+        return Center(child: Text("Sorry, no product found",
+        style: TextStyle(
+            fontSize: 40,
+
+        ),
+        textAlign: TextAlign.center,
+        ));
   }
 }

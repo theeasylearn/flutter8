@@ -1,6 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:online_shop_app/common.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_common/get_reset.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:online_shop_app/common.dart';
+import 'package:http/http.dart' as http;
 class Register extends StatefulWidget {
 
   @override
@@ -167,7 +172,51 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void doRegister() {
+  Future<void> doRegister() async {
       print(email + " " + mobile + " " + password + " " + confirmPassword);
+      String apiAddress = Base.getAddress() + "register.php";
+      //http://theeasylearnacademy.com/shop/ws/register.php?email=kenil@gmail.com&password=123123&mobile=778899455
+      //successfull register
+      //[{"error":"no"},{"success":"yes"},{"message":"registered successfully"}]
+
+      //unsucessfull attempt
+      // [{"error":"no"},{"success":"no"},{"message":"email or mobile is already register with us"}]
+
+     // incase if input is missing
+     //[{"error":"input is missing"}]
+     Uri url = Uri.parse(apiAddress);
+
+     var response = await http.post(url);
+     print(response.body);
+     try
+     {
+       var data = json.decode(response.body);
+       print(data);
+       String error = data[0]['error'];
+       if(error != 'no') //there is an error
+       {
+         Get.snackbar('error',error,
+             snackPosition: SnackPosition.BOTTOM, // Position at the bottom
+             backgroundColor: Colors.red.shade200, // Background color
+             colorText: Colors.white, // Text color
+             margin: const EdgeInsets.all(10), // Margin for the snackbar
+             borderRadius: 8, // Rounded corners
+             duration: const Duration(seconds:7));
+       }
+       else
+         {
+
+         }
+     }
+     on Exception catch(error)
+     {
+        Get.snackbar('error','oops something went wrong, please try after sometime..',
+        snackPosition: SnackPosition.BOTTOM, // Position at the bottom
+        backgroundColor: Colors.red.shade200, // Background color
+        colorText: Colors.white, // Text color
+        margin: const EdgeInsets.all(10), // Margin for the snackbar
+      borderRadius: 8, // Rounded corners
+      duration: const Duration(seconds:7));
+     }
   }
 }

@@ -347,13 +347,10 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
       );
   }
-
   Future<void> getProductDetail() async {
-
     String apiAddress = Base.getAddress() + "product.php?productid=" + this.productid;
     //convert into uri
     Uri url = Uri.parse(apiAddress);
-
     //api call to fetch data from servers
     var response = await http.get(url);
     print(response.statusCode);
@@ -372,7 +369,6 @@ class _ProductDetailState extends State<ProductDetail> {
     productDetail.removeRange(0,2);
     print(productDetail);
     productList.add(Base.getImgAddress() + "product/" + productDetail[0]['photo'].toString());
-
     setState(() {
 
     });

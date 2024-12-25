@@ -29,6 +29,7 @@ class _LoginState extends State<Login> {
         password = passwordController.text.trim();
       }
     });
+
   }
 
   @override
@@ -126,5 +127,6 @@ class _LoginState extends State<Login> {
 
   void doLogin() {
     print("Email: $email, Password: $password");
+
   }
 }
