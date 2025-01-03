@@ -1,6 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:online_shop_app/category.dart';
+import 'package:online_shop_app/change_password.dart';
+import 'package:online_shop_app/profile.dart';
+import 'package:online_shop_app/wishlist.dart';
+
+import 'cart.dart';
 class AppColors
 {
   static Color darkPrimary()
@@ -69,16 +77,37 @@ class AppColors
   }
 
 }
-class MyNavigationBar
-{
-  static Widget getNavigationBar()
-  {
+class MyNavigationBar {
+  static Widget getNavigationBar() {
     return NavigationBar(
       backgroundColor: Colors.white,
-      labelBehavior:  NavigationDestinationLabelBehavior.alwaysShow,
-      selectedIndex: 0,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      selectedIndex: 0, // You can manage the active index dynamically
       onDestinationSelected: (int index) {
-
+        switch (index) {
+          case 0:
+            print('Category should open');
+            Get.to(() => Category());
+            break;
+          case 1:
+            print('Search should open');
+            // Navigate to search if required
+            break;
+          case 2:
+            print('Profile should open');
+            Get.to(() => Profile());
+            break;
+          case 3:
+            print('Wishlist should open');
+            Get.to(() => Wishlist());
+            break;
+          case 4:
+            print('Cart should open');
+            Get.to(() => Cart());
+            break;
+          default:
+            break;
+        }
       },
       destinations: const <Widget>[
         NavigationDestination(
@@ -90,7 +119,6 @@ class MyNavigationBar
           label: 'Commute',
         ),
         NavigationDestination(
-          selectedIcon: Icon(Icons.account_circle),
           icon: Icon(Icons.account_circle),
           label: 'Profile',
         ),
@@ -106,6 +134,7 @@ class MyNavigationBar
     );
   }
 }
+
 class Base
 {
    static String getBase()
@@ -120,4 +149,28 @@ class Base
    {
      return getBase() + "images/";
    }
+}
+class Info
+{
+    static String CommonError = 'oops something went wrong, please try after sometime..';
+    static void error(title,msg)
+    {
+      Get.snackbar(title,msg,
+          snackPosition: SnackPosition.BOTTOM, // Position at the bottom
+          backgroundColor: Colors.red.shade200, // Background color
+          colorText: Colors.white, // Text color
+          margin: const EdgeInsets.all(10), // Margin for the snackbar
+          borderRadius: 8, // Rounded corners
+          duration: const Duration(seconds:7));
+    }
+    static void message(title,msg)
+    {
+      Get.snackbar(title,msg,
+          snackPosition: SnackPosition.BOTTOM, // Position at the bottom
+          backgroundColor: Colors.green.shade200, // Background color
+          colorText: Colors.white, // Text color
+          margin: const EdgeInsets.all(10), // Margin for the snackbar
+          borderRadius: 8, // Rounded corners
+          duration: const Duration(seconds:7));
+    }
 }

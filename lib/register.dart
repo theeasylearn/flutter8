@@ -1,11 +1,15 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_common/get_reset.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:online_shop_app/common.dart';
 import 'package:http/http.dart' as http;
+
+import 'login.dart';
 class Register extends StatefulWidget {
 
   @override
@@ -20,6 +24,7 @@ class _RegisterState extends State<Register> {
 
   String email='',password='',mobile='',confirmPassword='';
 
+  FlutterSecureStorage storage = new FlutterSecureStorage();
 
   @override
   void initState() {
@@ -185,8 +190,11 @@ class _RegisterState extends State<Register> {
      // incase if input is missing
      //[{"error":"input is missing"}]
      Uri url = Uri.parse(apiAddress);
-
-     var response = await http.post(url);
+     HashMap<String,dynamic> form = new HashMap();
+     form['email'] = email;
+     form['password'] = password;
+     form['mobile'] = mobile;
+     var response = await http.post(url,body: form);
      print(response.body);
      try
      {
@@ -195,28 +203,28 @@ class _RegisterState extends State<Register> {
        String error = data[0]['error'];
        if(error != 'no') //there is an error
        {
-         Get.snackbar('error',error,
-             snackPosition: SnackPosition.BOTTOM, // Position at the bottom
-             backgroundColor: Colors.red.shade200, // Background color
-             colorText: Colors.white, // Text color
-             margin: const EdgeInsets.all(10), // Margin for the snackbar
-             borderRadius: 8, // Rounded corners
-             duration: const Duration(seconds:7));
+           Info.error('error',error);
        }
        else
          {
-
+           String success = data[1]['success'];
+           String message = data[2]['message'];
+           if(success == 'no')
+             Info.error('attention',message);
+           else
+            {
+              Info.message('attention',message);
+              //create variable inside storage
+              storage.write(key: 'userid', value: '-1');
+              //redirect Login Screen
+              Get.off(new Login());
+              
+            }
          }
      }
      on Exception catch(error)
      {
-        Get.snackbar('error','oops something went wrong, please try after sometime..',
-        snackPosition: SnackPosition.BOTTOM, // Position at the bottom
-        backgroundColor: Colors.red.shade200, // Background color
-        colorText: Colors.white, // Text color
-        margin: const EdgeInsets.all(10), // Margin for the snackbar
-      borderRadius: 8, // Rounded corners
-      duration: const Duration(seconds:7));
+        Info.error('error',Info.CommonError);
      }
   }
 }

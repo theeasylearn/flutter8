@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:online_shop_app/category.dart';
 import 'package:online_shop_app/common.dart';
+import 'package:online_shop_app/register.dart';
+
+import 'login.dart';
 
 class Home extends StatefulWidget {
 
@@ -9,13 +16,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currentPageIndex = 0;
+  FlutterSecureStorage storage = new FlutterSecureStorage();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserLoginStatus();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Home",
       debugShowCheckedModeBanner: false, // Removes the debug banner
       home: Scaffold(
-        bottomNavigationBar: MyNavigationBar.getNavigationBar(),
         body: Material(
           child: LayoutBuilder(builder: (context,parent){
             return(
@@ -78,14 +91,14 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             MaterialButton(onPressed: (){
-
+                              Get.to(new Login());
                             },
                               color: AppColors.darkPrimary(),
                               textColor: AppColors.textColor(),
                               child: Text("Sign in"),
                             ),
                             MaterialButton(onPressed: (){
-
+                              Get.to(new Register());
                             },
                               color: AppColors.accentColor(),
                               textColor: AppColors.textColor(),
@@ -102,5 +115,20 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void getUserLoginStatus() {
+      //get value of userid key from storage
+      storage.read(key: 'userid').then((userid){
+          if(userid != null && userid == '-1')
+          {
+             //user is guest
+            Get.to(new Login());
+          }
+          else if(userid != null && userid != '-1')
+          {
+            Get.to(new Category());
+          }
+      });
   }
 }

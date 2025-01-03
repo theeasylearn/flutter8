@@ -1,6 +1,8 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:online_shop_app/common.dart';
@@ -20,6 +22,7 @@ class _ProductState extends State<Product> {
   int currentPageIndex = 0;
   var products = []; //empty list
   String categoryid = '';
+  FlutterSecureStorage storage = new FlutterSecureStorage();
   _ProductState(String categoryid)
   {
       this.categoryid = categoryid;
@@ -130,7 +133,8 @@ class _ProductState extends State<Product> {
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
                          MaterialButton(onPressed: (){
-
+                            String apiAddress = "add_to_cart.php";
+                            ProcessRequest(apiAddress,products[index]['id'].toString());
                          },
                            color: AppColors.accentColor(),
                            textColor: AppColors.textColor(),
@@ -140,7 +144,8 @@ class _ProductState extends State<Product> {
                            width: 5,
                          ),
                          MaterialButton(onPressed: (){
-
+                           String apiAddress = "add_to_wishlist.php";
+                            ProcessRequest(apiAddress,products[index]['id'].toString());
                          },
                            color: AppColors.accentColor(),
                            textColor: AppColors.textColor(),
@@ -168,5 +173,43 @@ class _ProductState extends State<Product> {
         ),
         textAlign: TextAlign.center,
         ));
+  }
+
+  Future<void> ProcessRequest(String apiAddress,String productid)
+  async {
+    //addtocart
+    //[{"error":"input is missing"}] in case of input missing
+    //https://theeasylearnacademy.com/shop/ws/add_to_cart.php?usersid=25&productid=2 when all inputs are given
+
+    //addtowishlist
+    //[{"error":"input is missing"}] in case of input missing
+    //[{"error":"no"},{"message":"product added into wishlist"}] when all inputs are given
+    storage.read(key: 'userid').then((userid) async {
+      apiAddress = Base.getAddress() + apiAddress;
+      Uri url = Uri.parse(apiAddress);
+      HashMap<String,dynamic> form = new HashMap();
+      form['usersid'] = userid;
+      form['productid'] = productid;
+      var response = await http.post(url,body: form);
+      try
+      {
+        var data = json.decode(response.body);
+        String error = data[0]['error'];
+        if(error == 'no')
+        {
+          String message = data[1]['message'];
+          Info.message('success',data[1]['message']);
+        }
+        else
+        {
+          Info.error('error',error);
+        }
+      }
+      on Exception catch(error)
+      {
+        Info.error('error',Info.CommonError);
+      }
+    });
+
   }
 }

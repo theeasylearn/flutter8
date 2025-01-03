@@ -1,6 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:online_shop_app/common.dart';
+import 'dart:collection';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:online_shop_app/category.dart';
+import 'package:online_shop_app/common.dart';
+import 'package:http/http.dart' as http;
+
+import 'home.dart';
 class Login extends StatefulWidget {
 
   @override
@@ -11,7 +20,7 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String email = '', password = '';
-
+  FlutterSecureStorage storage = new FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
@@ -125,8 +134,39 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void doLogin() {
+  Future<void> doLogin() async {
     print("Email: $email, Password: $password");
+    var apiAddress = "http://theeasylearnacademy.com/shop/ws/login.php";
+    //[{"error":"input is missing"}] in case if inputs are missing
 
+    //[{"error":"no"},{"success":"no"},{"message":"invalid login attempt"}] in case of wrong email and/or password
+    //[{"error":"no"},{"success":"yes"},{"message":"login successful"},{"id":"51"}] in case of successful login
+    Uri url = Uri.parse(apiAddress);
+    HashMap<String,dynamic> form = new HashMap();
+    form['email'] = email;
+    form['password'] = password;
+    var response = await http.post(url,body:form);
+    print(response.body);
+    try
+    {
+      var data = json.decode(response.body);
+      String error = data[0]['error'];
+      if(error != 'no') Info.error('error',error);
+      else
+      {
+         String success = data[1]['success'];
+         String message = data[2]['message'];
+         if(success == 'no') Info.error('error', message);
+         else
+         {
+            storage.write(key: 'userid', value: data[3]['id'].toString());
+            Get.off(() => Category());
+         }
+      }
+    }
+    on Exception catch(error)
+    {
+      Info.error('error',Info.CommonError);
+    }
   }
 }

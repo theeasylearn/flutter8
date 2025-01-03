@@ -1,19 +1,36 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:online_shop_app/common.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+import 'package:http/http.dart' as http;
 class Cart extends StatefulWidget {
   @override
   State<Cart> createState() => _CartState();
 }
 
 class _CartState extends State<Cart> {
+  //declare secure storage type object
+  FlutterSecureStorage storage = new FlutterSecureStorage();
+  //create list to store cart items data
+  var cartItems = []; //empty list
+  int cartTotal = 0;
+  //Override initstate method
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //call getCartItems method
+    getCartItems();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: MyNavigationBar.getNavigationBar(),
-      body: Material(
+      body: Container(
         color: AppColors.textColor(),
         child: Padding(
           padding: const EdgeInsets.only(top:50,left: 10,right: 10),
@@ -37,8 +54,8 @@ class _CartState extends State<Cart> {
                                   children: [
                                     // Use Flexible to manage layout constraints
                                     Flexible(
-                                      child: Image.asset(
-                                        'images/image_placeholder.jpg',
+                                      child: Image.network(
+                                       Base.getImgAddress() + "product/" + cartItems[index]['photo'],
                                         height: 100,
                                         fit: BoxFit.cover,
                                       ),
@@ -53,13 +70,18 @@ class _CartState extends State<Cart> {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text("IPhone 15 pro max",
+                                              Text(cartItems[index]['title'],
                                                 style: TextStyle(
                                                     fontSize: 16
                                                 ),),
-                                              Icon(
-                                                Icons.delete,
-                                                size: 24,
+                                              InkWell(
+                                                onTap: (){
+                                                    deleteFromCart(cartItems[index],index);
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  size: 24,
+                                                ),
                                               )
                                             ],
                                           ),
@@ -67,7 +89,7 @@ class _CartState extends State<Cart> {
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Expanded(
-                                                child: Text("Rs 1500",
+                                                child: Text("Rs " + cartItems[index]['price'],
                                                   style: TextStyle(
                                                       fontSize: 16
                                                   ),),
@@ -80,7 +102,7 @@ class _CartState extends State<Cart> {
                                                 ),
                                               ),
                                               Expanded(
-                                                child: Text("3",
+                                                child: Text(cartItems[index]['quantity'],
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 16,
@@ -103,7 +125,7 @@ class _CartState extends State<Cart> {
                               ),
                             );
                           },
-                              childCount: 4))
+                              childCount: cartItems.length))
                         ],
                       ),
                     ),
@@ -115,7 +137,7 @@ class _CartState extends State<Cart> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Total"),
-                              Text("375000"),
+                              Text("Rs" + cartTotal.toString()),
                             ],
                           )),
                     ),
@@ -141,5 +163,93 @@ class _CartState extends State<Cart> {
         ),
       ),
     );
+  }
+
+  void getCartItems() {
+    //get value of cart key from storage
+    storage.read(key: 'userid').then((userid) async {
+      if(userid != null)
+      {
+         //call api
+          //[{"error":"input is missing"}] in case if input is not given
+          //[{"error":"no"},{"total":0}] if cart is empty
+          //[
+          // {"error":"no"},
+          // {"total":2},
+          // {"id":"1","cartid":"157","title":"Acer Laptop","price":"100","quantity":"3","weight":"3000","size":"15 inch","photo":"acer.jpg","detail":"WINDOWS 10 4 GB DDR3 RAM 128 gb ssd hard disk"},
+          // {"id":"2","cartid":"158","title":"dell laptop","price":"200","quantity":"4","weight":"3500","size":"15 inch","photo":"dell.jpg","detail":"WINDOWS 10 8 GB DDR3 RAM 512 gb ssd hard disk"}]
+          String apiAddress = "cart.php?usersid=" + userid;
+          print(apiAddress);
+          //convert into uri
+          Uri uri = Uri.parse(Base.getAddress() + apiAddress);
+          //call get method
+          var response = await http.get(uri);
+          print(response.body);
+          try
+          {
+            var data = json.decode(response.body);
+            String error = data[0]['error'];
+            if(error != 'no')
+              Info.error('error',error);
+            else
+            {
+               int total = data[1]['total'];
+               if(total != 0)
+               {
+                  //delete first 2 items
+                  data.removeRange(0,2);
+                  //calculates
+                  int price = 0;
+                  int quantity = 0;
+                  int itemTotal = 0;
+                  for(int position=0;position<data.length;position++)
+                  {
+                     quantity = int.parse(data[position]['quantity'].toString());
+                     price = int.parse(data[position]['price'].toString());
+                     itemTotal = price * quantity;
+                     cartTotal += itemTotal;
+                  }
+                  setState(() {
+                      cartItems = data;
+                  });
+               }
+            }
+
+          }
+          on Exception catch(error)
+          {
+            Info.error('error',Info.CommonError);
+          }
+      }
+    });
+  }
+
+  Future<void> deleteFromCart(cart,index) async {
+      String apiAddress = Base.getAddress() + "delete_from_cart.php?cartid=" + cart['id'];
+      Uri url = Uri.parse(apiAddress);
+      var response = await http.get(url);
+      print(response.body);
+      try
+      {
+        var data = json.decode(response.body);
+        String error = data[0]['error'];
+        if(error != 'no')
+          Info.error('error',error);
+        else
+        {
+            Info.message('success',data[1]['message']);
+            setState(() {
+              int tempTotal = int.parse(cart['price']) * int.parse(cart['quantity']);
+              cartTotal = cartTotal - tempTotal;
+              cartItems.removeAt(index);
+            });
+        }
+
+      }
+      on Exception catch(error)
+      {
+          Info.error('error',Info.CommonError);
+      }
+
   }
 }

@@ -17,5 +17,5 @@ import 'package:online_shop_app/wishlist.dart';
 import 'cart.dart';
 void main() {
   // runApp(ProductDetail());
-  runApp(GetMaterialApp(home: Register()));
+  runApp(GetMaterialApp(home: Home()));
 }
