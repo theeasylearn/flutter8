@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:online_shop_app/common.dart';
@@ -62,7 +60,12 @@ class _WishlistState extends State<Wishlist> {
                                 color: Colors.white,
                               ),
                             ),
-                            Icon(Icons.delete,size: 22,)
+                            InkWell(
+                              onTap: () {
+                                  deleteFromWishlist(items[index]['wishlistid'],index);
+                              },
+                              child:Icon(Icons.delete,size: 22,)
+                            )
                           ],
                         ),
                       ],
@@ -143,5 +146,30 @@ class _WishlistState extends State<Wishlist> {
           }
         }
     });
+  }
+
+  Future<void> deleteFromWishlist(var wishlistId, int index) async {
+      String apiAddress = Base.getAddress() + "delete_from_wishlist.php?wishlistid=" + wishlistId;
+      print(apiAddress);
+      var response = await http.get(Uri.parse(apiAddress));
+      print(response.body);
+      try
+      {
+          var data = json.decode(response.body);
+          String error = data[0]['error'];
+          if(error != 'no')
+            Info.error('error',error);
+          else
+          {
+            Info.message('success',data[1]['message']);
+            setState(() {
+              items.removeAt(index);
+            });
+          }
+      }
+      on Exception catch(error)
+      {
+          Info.error('error',Info.CommonError);
+      }
   }
 }

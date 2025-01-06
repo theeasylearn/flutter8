@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:online_shop_app/common.dart';
@@ -44,86 +42,7 @@ class _CartState extends State<Cart> {
                       child: CustomScrollView(
                         slivers: [
                           SliverList(delegate: SliverChildBuilderDelegate((BuildContext ctx,int index){
-                            return SizedBox(
-                              height: 120,
-                              child: Card(
-                                color: AppColors.productBackground(),
-                                elevation: 10,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    // Use Flexible to manage layout constraints
-                                    Flexible(
-                                      child: Image.network(
-                                       Base.getImgAddress() + "product/" + cartItems[index]['photo'],
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 200,
-                                      padding: EdgeInsets.all(8),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(cartItems[index]['title'],
-                                                style: TextStyle(
-                                                    fontSize: 16
-                                                ),),
-                                              InkWell(
-                                                onTap: (){
-                                                    deleteFromCart(cartItems[index],index);
-                                                },
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  size: 24,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: Text("Rs " + cartItems[index]['price'],
-                                                  style: TextStyle(
-                                                      fontSize: 16
-                                                  ),),
-                                                flex: 2,
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child:
-                                                Icon(Icons.remove
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(cartItems[index]['quantity'],
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-
-                                                  ),),
-                                                flex: 1,
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Icon(
-                                                    Icons.add
-                                                ),)
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
+                            return displayItem(index);
                           },
                               childCount: cartItems.length))
                         ],
@@ -251,5 +170,97 @@ class _CartState extends State<Cart> {
           Info.error('error',Info.CommonError);
       }
 
+  }
+
+  Widget displayItem(int index) {
+      if(cartItems.length==0)
+      {
+          return Center(
+            child: Image.asset('images/empty_cart.png'),
+          );
+      }
+      else
+      {
+          return SizedBox(
+            height: 120,
+            child: Card(
+              color: AppColors.productBackground(),
+              elevation: 10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Use Flexible to manage layout constraints
+                  Flexible(
+                    child: Image.network(
+                      Base.getImgAddress() + "product/" + cartItems[index]['photo'],
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                    width: 200,
+                    padding: EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(cartItems[index]['title'],
+                              style: TextStyle(
+                                  fontSize: 16
+                              ),),
+                            InkWell(
+                              onTap: (){
+                                deleteFromCart(cartItems[index],index);
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                size: 24,
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text("Rs " + cartItems[index]['price'],
+                                style: TextStyle(
+                                    fontSize: 16
+                                ),),
+                              flex: 2,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child:
+                              Icon(Icons.remove
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(cartItems[index]['quantity'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+
+                                ),),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Icon(
+                                  Icons.add
+                              ),)
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+      }
   }
 }
