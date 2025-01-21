@@ -60,11 +60,25 @@ class _WishlistState extends State<Wishlist> {
                                 color: Colors.white,
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                  deleteFromWishlist(items[index]['wishlistid'],index);
-                              },
-                              child:Icon(Icons.delete,size: 22,)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      print(items[index]['id']);
+                                      moveToCart(items[index]['id']);
+                                    },
+                                    child:Icon(Icons.add_shopping_cart,size: 22,)
+                                ),
+                                InkWell(
+                                    onTap: () {
+                                      deleteFromWishlist(items[index]['wishlistid'],index);
+                                    },
+                                    child:Icon(
+                                      Icons.delete,size: 22,
+                                      color: Colors.white,)
+                                ),
+                              ],
                             )
                           ],
                         ),
@@ -171,5 +185,15 @@ class _WishlistState extends State<Wishlist> {
       {
           Info.error('error',Info.CommonError);
       }
+  }
+
+  void moveToCart(int productid) {
+      print(productid);
+      // storage.read(key: 'userid').then((userid) {
+      //     String apiAddress = "https://theeasylearnacademy.com/shop/ws/move_to_cart.php?usersid=" + userid
+      //         + "&productid=" + item[index]['id'].toString();
+      //     print(apiAddress);
+      //
+      // });
   }
 }
