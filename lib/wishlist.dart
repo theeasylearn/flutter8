@@ -65,8 +65,9 @@ class _WishlistState extends State<Wishlist> {
                               children: [
                                 InkWell(
                                     onTap: () {
+                                      print("we have clicked on move to cart button");
                                       print(items[index]['id']);
-                                      moveToCart(items[index]['id']);
+                                      moveToCart(items[index]['id'],index);
                                     },
                                     child:Icon(Icons.add_shopping_cart,size: 22,)
                                 ),
@@ -165,35 +166,40 @@ class _WishlistState extends State<Wishlist> {
   Future<void> deleteFromWishlist(var wishlistId, int index) async {
       String apiAddress = Base.getAddress() + "delete_from_wishlist.php?wishlistid=" + wishlistId;
       print(apiAddress);
-      var response = await http.get(Uri.parse(apiAddress));
-      print(response.body);
-      try
-      {
-          var data = json.decode(response.body);
-          String error = data[0]['error'];
-          if(error != 'no')
-            Info.error('error',error);
-          else
-          {
-            Info.message('success',data[1]['message']);
-            setState(() {
-              items.removeAt(index);
-            });
-          }
-      }
-      on Exception catch(error)
-      {
-          Info.error('error',Info.CommonError);
-      }
+      CallApi(apiAddress,index);
   }
 
-  void moveToCart(int productid) {
+  void moveToCart(var productid,index) {
       print(productid);
-      // storage.read(key: 'userid').then((userid) {
-      //     String apiAddress = "https://theeasylearnacademy.com/shop/ws/move_to_cart.php?usersid=" + userid
-      //         + "&productid=" + item[index]['id'].toString();
-      //     print(apiAddress);
-      //
-      // });
+      storage.read(key: 'userid').then((userid) {
+          String apiAddress = "https://theeasylearnacademy.com/shop/ws/move_to_cart.php?usersid=" + userid.toString()
+              + "&productid=" + productid.toString();
+          print(apiAddress);
+          CallApi(apiAddress, index);
+
+      });
+  }
+
+  Future<void> CallApi(String apiAddress,int index) async {
+    var response = await http.get(Uri.parse(apiAddress));
+    print(response.body);
+    try
+    {
+      var data = json.decode(response.body);
+      String error = data[0]['error'];
+      if(error != 'no')
+        Info.error('error',error);
+      else
+      {
+        Info.message('success',data[1]['message']);
+        setState(() {
+          items.removeAt(index);
+        });
+      }
+    }
+    on Exception catch(error)
+    {
+      Info.error('error',Info.CommonError);
+    }
   }
 }
