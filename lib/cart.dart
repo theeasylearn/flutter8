@@ -218,7 +218,13 @@ class _CartState extends State<Cart> {
                                         ),
                                         Expanded(
                                           flex: 1,
-                                          child: Icon(Icons.remove),
+                                          child: InkWell(
+                                              onTap : () {
+                                                print("minus button clicked...");
+                                                updateCart(cartItems[index],"minus");
+                                              },
+                                              child:Icon(Icons.remove)
+                                          ),
                                         ),
                                         Expanded(
                                           child: Text(
@@ -232,7 +238,13 @@ class _CartState extends State<Cart> {
                                         ),
                                         Expanded(
                                           flex: 1,
-                                          child: Icon(Icons.add),
+                                          child: InkWell(
+                                              onTap: () {
+                                                  print("plus button clicked...");
+                                                  updateCart(cartItems[index],"plus");
+                                              },
+                                              child: Icon(Icons.add)
+                                          ),
                                         )
                                       ],
                                     ),
@@ -279,5 +291,40 @@ class _CartState extends State<Cart> {
     } on Exception catch (error) {
       Info.error('error', Info.CommonError);
     }
+  }
+
+  Future<void> updateCart(cartItem, String mode) async {
+      print(cartItem + " " + mode);
+      String apiAddress = "";
+      if(mode == "plus") {
+        apiAddress  =  Base.getAddress() + "add_to_cart.php?productid=10&usersid=3";
+      }
+      else {
+        apiAddress = Base.getAddress() +
+            "add_to_cart.php?productid=10&usersid=3&mode=minus";
+      }
+
+
+      Uri url = Uri.parse(apiAddress);
+      var response = await http.get(url);
+      print(response.body);
+      try {
+        var data = json.decode(response.body);
+        String error = data[0]['error'];
+        if (error != 'no')
+          Info.error('error', error);
+        else {
+          Info.message('success', data[1]['message']);
+          setState(() {
+            if(mode == "plus")
+                cartTotal = cartTotal + int.parse(cartItem['price'].toString());
+            else
+              cartTotal = cartTotal - int.parse(cartItem['price'].toString());
+          });
+        }
+      } on Exception catch (error) {
+        Info.error('error', Info.CommonError);
+      }
+  }
   }
 }
