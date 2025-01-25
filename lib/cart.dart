@@ -134,7 +134,7 @@ class _CartState extends State<Cart> {
   Future<void> deleteFromCart(cart, index) async {
     String apiAddress =
         Base.getAddress() + "delete_from_cart.php?cartid=" + cart['cartid'];
-    CallApi(cart,apiAddress,index);
+    CallApi(cart, apiAddress, index);
   }
 
   Widget displayItem() {
@@ -143,134 +143,137 @@ class _CartState extends State<Cart> {
         child: Image.asset('images/empty_cart.png'),
       );
     } else {
-        return CustomScrollView(
-          slivers: [
-            SliverList(
-                delegate: SliverChildBuilderDelegate(
-                        (BuildContext ctx, int index) {
-                      return SizedBox(
-
-                        height: 120,
-                        child: Card(
-                          color: AppColors.productBackground(),
-                          elevation: 10,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      return CustomScrollView(
+        slivers: [
+          SliverList(
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext ctx, int index) {
+            return SizedBox(
+              height: 120,
+              child: Card(
+                color: AppColors.productBackground(),
+                elevation: 10,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Use Flexible to manage layout constraints
+                    Flexible(
+                      child: Image.network(
+                        Base.getImgAddress() +
+                            "product/" +
+                            cartItems[index]['photo'],
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Container(
+                      width: 200,
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Use Flexible to manage layout constraints
-                              Flexible(
-                                child: Image.network(
-                                  Base.getImgAddress() + "product/" + cartItems[index]['photo'],
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                ),
+                              Text(
+                                cartItems[index]['title'],
+                                style: TextStyle(fontSize: 16),
                               ),
-                              Container(
-                                width: 200,
-                                padding: EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          cartItems[index]['title'],
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                       Row(
-                                         mainAxisAlignment: MainAxisAlignment.end,
-                                         children: [
-                                           InkWell(
-                                             onTap: () {
-                                               print('hello');
-                                               moveToWishlist(cartItems[index], index);
-                                             },
-                                             child: Icon(
-                                               Icons.heart_broken,
-                                               size: 24,
-                                             ),
-                                           ),
-                                           InkWell(
-                                             onTap: () {
-                                               deleteFromCart(cartItems[index], index);
-                                             },
-                                             child: Icon(
-                                               Icons.delete,
-                                               size: 24,
-                                             ),
-                                           ),
-
-                                         ],
-                                       )
-                                      ],
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      print('hello');
+                                      moveToWishlist(cartItems[index], index);
+                                    },
+                                    child: Icon(
+                                      Icons.heart_broken,
+                                      size: 24,
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "Rs " + cartItems[index]['price'],
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          flex: 2,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: InkWell(
-                                              onTap : () {
-                                                print("minus button clicked...");
-                                                updateCart(cartItems[index],"minus");
-                                              },
-                                              child:Icon(Icons.remove)
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            cartItems[index]['quantity'],
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          flex: 1,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: InkWell(
-                                              onTap: () {
-                                                  print("plus button clicked...");
-                                                  updateCart(cartItems[index],"plus");
-                                              },
-                                              child: Icon(Icons.add)
-                                          ),
-                                        )
-                                      ],
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      deleteFromCart(cartItems[index], index);
+                                    },
+                                    child: Icon(
+                                      Icons.delete,
+                                      size: 24,
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                        ),
-                      );
-                    }, childCount: cartItems.length))
-          ],
-        );
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Rs " + cartItems[index]['price'],
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                flex: 2,
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                    onTap: () {
+                                      print("minus button clicked...");
+                                      updateCart(
+                                          cartItems[index], "minus", index);
+                                    },
+                                    child: Icon(Icons.remove)),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  cartItems[index]['quantity'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                    onTap: () {
+                                      print("plus button clicked...");
+                                      updateCart(
+                                          cartItems[index], "plus", index);
+                                    },
+                                    child: Icon(Icons.add)),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }, childCount: cartItems.length))
+        ],
+      );
     }
   }
 
   void moveToWishlist(cartItem, int index) {
-    storage.read(key: 'userid').then((userid){
-      String apiAddress =
-          Base.getAddress() + "move_to_wishlist.php?usersid=" + userid.toString() + "&productid=" + cartItem['id'].toString();
-      CallApi(cartItem,apiAddress,index);
+    storage.read(key: 'userid').then((userid) {
+      String apiAddress = Base.getAddress() +
+          "move_to_wishlist.php?usersid=" +
+          userid.toString() +
+          "&productid=" +
+          cartItem['id'].toString();
+      CallApi(cartItem, apiAddress, index);
       print(apiAddress);
     });
   }
 
-  Future<void> CallApi(cart,apiAddress,index) async {
+  Future<void> CallApi(cart, apiAddress, index) async {
     Uri url = Uri.parse(apiAddress);
     var response = await http.get(url);
     print(response.body);
@@ -293,38 +296,43 @@ class _CartState extends State<Cart> {
     }
   }
 
-  Future<void> updateCart(cartItem, String mode) async {
-      print(cartItem + " " + mode);
-      String apiAddress = "";
-      if(mode == "plus") {
-        apiAddress  =  Base.getAddress() + "add_to_cart.php?productid=10&usersid=3";
-      }
+  Future<void> updateCart(cartItem, String mode, int index) async {
+    print(mode);
+    //print(cartItem);
+    String apiAddress = "";
+    storage.read(key: 'userid').then((userid) async {
+    if (mode == "plus") {
+        apiAddress = Base.getAddress() + "add_to_cart.php?productid=" + cartItems[index]['id'].toString()
+            + "&usersid=" + userid.toString();
+  } else {
+    apiAddress = Base.getAddress() + "add_to_cart.php?productid="
+        + cartItems[index]['id'].toString() + "&usersid=" + userid.toString() + "&mode=minus";
+    }
+    print(apiAddress);
+
+    Uri url = Uri.parse(apiAddress);
+    var response = await http.get(url);
+
+    try {
+      var data = json.decode(response.body);
+      String error = data[0]['error'];
+      if (error != 'no')
+        Info.error('error', error);
       else {
-        apiAddress = Base.getAddress() +
-            "add_to_cart.php?productid=10&usersid=3&mode=minus";
+        Info.message('success', data[1]['message']);
+        setState(() {
+          if (mode == "plus") {
+            cartTotal = cartTotal + int.parse(cartItem['price'].toString());
+            cartItems[index]['quantity'] = (int.parse(cartItems[index]['quantity'].toString()) + 1).toString();
+          } else {
+            cartTotal = cartTotal - int.parse(cartItem['price'].toString());
+            cartItems[index]['quantity'] = (int.parse(cartItems[index]['quantity'].toString()) - 1).toString();
+          }
+        });
       }
-
-
-      Uri url = Uri.parse(apiAddress);
-      var response = await http.get(url);
-      print(response.body);
-      try {
-        var data = json.decode(response.body);
-        String error = data[0]['error'];
-        if (error != 'no')
-          Info.error('error', error);
-        else {
-          Info.message('success', data[1]['message']);
-          setState(() {
-            if(mode == "plus")
-                cartTotal = cartTotal + int.parse(cartItem['price'].toString());
-            else
-              cartTotal = cartTotal - int.parse(cartItem['price'].toString());
-          });
-        }
-      } on Exception catch (error) {
-        Info.error('error', Info.CommonError);
-      }
-  }
+    } on Exception catch (error) {
+      Info.error('error', Info.CommonError);
+    }
+    });
   }
 }
