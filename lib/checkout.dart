@@ -1,7 +1,17 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:online_shop_app/common.dart';
+import 'package:http/http.dart' as http;
+
+import 'category.dart';
+
 class Checkout extends StatefulWidget {
   @override
   State<Checkout> createState() => _CheckoutState();
@@ -29,6 +39,7 @@ class _CheckoutState extends State<Checkout> {
   String remarks = '';
 
   PaymentMethod selectedPaymentMethod = PaymentMethod.cashOnDelivery;
+  FlutterSecureStorage storage = new FlutterSecureStorage();
 
   @override
   void initState() {
@@ -236,7 +247,7 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 
-  void placeOrder() {
+  Future<void> placeOrder() async {
     print("Full Name: $fullName");
     print("Mobile: $mobile");
     print("Address Line 1: $addressLine1");
@@ -245,5 +256,50 @@ class _CheckoutState extends State<Checkout> {
     print("Pincode: $pincode");
     print("Remarks: $remarks");
     print("Payment Method: ${selectedPaymentMethod == PaymentMethod.cashOnDelivery ? 'Cash on Delivery' : 'Online'}");
+    /*
+      http://localhost/flutter_php/ws/checkout.php?usersid=3&fullname=ankit_patel&address1=eva_surbhi&
+      address2=opp_akshwarwadi_temple&mobile=9662512857&city=bhavnagar&pincode=364001&remarks=gif_pack
+       1) [{"error":"input is missing"}]
+        2) [{"error":"no"},{"success":"no"},{"message":"cart is empty"}]
+        3) [{"error":"no"},{"success":"no"},{"message":"following items are out of stock \ndell laptop"}]
+        4) [{"error":"no"},{"success":"yes"},{"message":"order placed successfully with orderid 4"}]
+        input : usersid,fullname,address1,address2,mobile,city,pincode,remarks (required)
+     */
+    storage.read(key: 'userid').then((userid) async {
+      var apiAddress = "http://theeasylearnacademy.com/shop/ws/checkout.php";
+      Uri url = Uri.parse(apiAddress);
+      HashMap<String,dynamic> form = new HashMap();
+      form['usersid'] = userid;
+      form['fullname'] = fullName;
+      form['address1'] = addressLine1;
+      form['address2'] = addressLine2;
+      form['mobile'] = mobile;
+      form['city'] = city;
+      form['pincode'] = pincode;
+      form['remarks'] = remarks;
+      var response = await http.post(url,body:form);
+      print(response.body);
+      try
+      {
+        var data = json.decode(response.body);
+        String error = data[0]['error'];
+        if(error != 'no') Info.error('error',error);
+        else
+        {
+          String success = data[1]['success'];
+          String message = data[2]['message'];
+          if(success == 'no') Info.error('error', message);
+          else
+          {
+            Info.message('success',message);
+            Get.off(() => Category());
+          }
+        }
+      }
+      on Exception catch(error)
+      {
+        Info.error('error',Info.CommonError);
+      }
+    });
   }
 }

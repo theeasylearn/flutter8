@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:online_shop_app/checkout.dart';
 import 'package:online_shop_app/common.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:http/http.dart' as http;
+
+import 'category.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -64,7 +69,13 @@ class _CartState extends State<Cart> {
                         style: ElevatedButton.styleFrom(
                             foregroundColor: AppColors.textColor(),
                             backgroundColor: AppColors.accentColor()),
-                        onPressed: () {},
+                        onPressed: () {
+                          if(cartItems.length>0)
+                          {
+                              print("we can use Checkout");
+                              Get.to(() => Checkout());
+                          }
+                        },
                         child: Text("Proceed to checkout"),
                       ),
                     ),
@@ -221,8 +232,10 @@ class _CartState extends State<Cart> {
                                 child: InkWell(
                                     onTap: () {
                                       print("minus button clicked...");
-                                      updateCart(
-                                          cartItems[index], "minus", index);
+                                      if(int.parse(cartItems[index]['quantity'].toString())>1)
+                                      {
+                                        updateCart(cartItems[index], "minus", index);
+                                      }
                                     },
                                     child: Icon(Icons.remove)),
                               ),
@@ -325,8 +338,10 @@ class _CartState extends State<Cart> {
             cartTotal = cartTotal + int.parse(cartItem['price'].toString());
             cartItems[index]['quantity'] = (int.parse(cartItems[index]['quantity'].toString()) + 1).toString();
           } else {
-            cartTotal = cartTotal - int.parse(cartItem['price'].toString());
-            cartItems[index]['quantity'] = (int.parse(cartItems[index]['quantity'].toString()) - 1).toString();
+
+              cartTotal = cartTotal - int.parse(cartItem['price'].toString());
+              cartItems[index]['quantity'] = (int.parse(cartItems[index]['quantity'].toString()) - 1).toString();
+
           }
         });
       }

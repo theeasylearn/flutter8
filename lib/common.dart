@@ -7,6 +7,7 @@ import 'package:online_shop_app/category.dart';
 import 'package:online_shop_app/change_password.dart';
 import 'package:online_shop_app/profile.dart';
 import 'package:online_shop_app/wishlist.dart';
+import 'package:online_shop_app/search_product.dart';
 
 import 'cart.dart';
 class AppColors
@@ -92,6 +93,8 @@ class MyNavigationBar {
           case 1:
             print('Search should open');
             // Navigate to search if required
+            Get.to(() => SearchProduct());
+
             break;
           case 2:
             print('Profile should open');
