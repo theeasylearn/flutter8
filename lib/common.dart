@@ -119,7 +119,7 @@ class MyNavigationBar {
         ),
         NavigationDestination(
           icon: Icon(Icons.search),
-          label: 'Commute',
+          label: 'Search',
         ),
         NavigationDestination(
           icon: Icon(Icons.account_circle),
