@@ -29,23 +29,63 @@ class _SearchProductState extends State<SearchProduct> {
     getProducts();
   }
   @override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Home",
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         bottomNavigationBar: MyNavigationBar.getNavigationBar(),
-        body: Card(
+        body: SizedBox(
+          height: double.infinity,
+          child: Card(
             color: Colors.white,
             elevation: 10,
-            child: showProducts()
+            child: Column(
+              children: [
+                // Row takes 20% of the height
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 8, // 80% of the space
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Search for a product',  // Placeholder text
+                            border: OutlineInputBorder(),      // Optional: adds a border to the TextField
+                          ),
+                        )
+                        ,
+                      ),
+                      SizedBox(width: 10), // Optional spacing between the TextField and the button
+                      Expanded(
+                        flex: 2, // 20% of the space
+                        child: ElevatedButton(
+                          onPressed: () {
+                            print('button clicked....');
+                          },
+                          child: Icon(Icons.search),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // showProducts takes 80% of the height
+                Expanded(
+                  child: showProducts(),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
+
   Future<void> getProducts()  async {
-    String apiAddress = Base.getAddress() + "product.php?categoryid=" + this.categoryid;
+    String apiAddress = Base.getAddress() + "product.php";
     print(apiAddress);
     //convert into uri
     Uri url = Uri.parse(apiAddress);
