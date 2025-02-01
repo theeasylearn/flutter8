@@ -20,13 +20,18 @@ class _SearchProductState extends State<SearchProduct> {
   var products = []; //empty list
   String categoryid = '';
   FlutterSecureStorage storage = new FlutterSecureStorage();
-
+  TextEditingController productController = new TextEditingController();
+  String ProductToSearch = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    getProducts();
+    productController.addListener((){
+        if (productController.text.trim() != '')
+        {
+            ProductToSearch = productController.text.trim();
+        }
+    });
   }
   @override
   @override
@@ -51,10 +56,16 @@ class _SearchProductState extends State<SearchProduct> {
                       Expanded(
                         flex: 8, // 80% of the space
                         child: TextFormField(
+                          controller: productController,
                           decoration: InputDecoration(
                             hintText: 'Search for a product',  // Placeholder text
                             border: OutlineInputBorder(),      // Optional: adds a border to the TextField
                           ),
+                            onFieldSubmitted: (value) {
+                              // This is called when the user presses the "Enter" key on the keyboard
+                              print('user want to search for ' + ProductToSearch);
+                              SearchProductOnServer();
+                            }
                         )
                         ,
                       ),
@@ -63,7 +74,8 @@ class _SearchProductState extends State<SearchProduct> {
                         flex: 2, // 20% of the space
                         child: ElevatedButton(
                           onPressed: () {
-                            print('button clicked....');
+                            print('user want to search for ' + ProductToSearch);
+                            SearchProductOnServer();
                           },
                           child: Icon(Icons.search),
                         ),
@@ -84,34 +96,7 @@ class _SearchProductState extends State<SearchProduct> {
   }
 
 
-  Future<void> getProducts()  async {
-    String apiAddress = Base.getAddress() + "product.php";
-    print(apiAddress);
-    //convert into uri
-    Uri url = Uri.parse(apiAddress);
 
-    //api call to fetch data from servers
-    var response = await http.get(url);
-    print(response.statusCode);
-    print(response.body);
-
-    //convert into json
-    products = json.decode(response.body);
-
-    //check whether json is properly contructed or not
-    String error = products[0]['error']; //store value of error key of 0th object into String variable error
-    print(error);
-
-    int total = int.parse(products[1]['total'].toString());
-    print(total);
-    //delete 2 objects
-    products.removeRange(0,2);
-    print(products);
-
-    setState(() {
-
-    });
-  }
 
   Widget showProducts()
   {
@@ -132,15 +117,6 @@ class _SearchProductState extends State<SearchProduct> {
                   children: [
                     SizedBox(
                       height: 20,
-                    ),
-                    FittedBox(
-                      child: Text(
-                        products[index]['categorytitle'].toString(),
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
                     Image.network( Base.getImgAddress() +'product/'
                         +  products[index]['photo'].toString()),
@@ -245,5 +221,39 @@ class _SearchProductState extends State<SearchProduct> {
       }
     });
 
+  }
+
+  Future<void> SearchProductOnServer() async {
+
+     String apiAddress = Base.getAddress()  + "search_product.php?name=" + ProductToSearch;
+     print(apiAddress);
+     var response = await http.get(Uri.parse(apiAddress));
+     print(response.body);
+     try
+         {
+           var data = json.decode(response.body);
+           String error = data[0]['error'];
+           if(error == 'no')
+           {
+              int total = int.parse(data[1]['total'].toString());
+              if (total == 0)
+                {
+                  Info.error('not found ', 'no such product ' + ProductToSearch);
+                  products.clear();
+                }
+              else
+              {
+                 data.removeRange(0,2);
+                 setState(() {
+                    products = data;
+                 });
+
+              }
+           }
+         }
+     on Exception catch(error)
+     {
+       Info.error('error',Info.CommonError);
+     }
   }
 }
